@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machine Combinator</title>
+  <style>
+    body {
+      font-family:Abhaya Libre;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      overflow-x: auto; /* Enable horizontal scrolling on small devices */
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #413f3f;
+      color:white;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .details-container {
+      display: none;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .back-button {
+      padding: 10px;
+      background-color: #6c757d;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .back-button:hover {
+      background-color: #545b62;
+    }
+
+    .download-ui {
+      display: none;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .download-ui button {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      /* Responsive styles for small screens */
+      th, td {
+        font-size: 12px;
+      }
+
+      button {
+        margin: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Machine Combinator</h2>
+
+  <button onclick="generateCombinations()">Generate Combinations</button>
+  <button onclick="saveCombinations()">Save Combinations</button>
+  <button onclick="showDownloadUI()">Download Combinations</button>
+
+  <table id="combinationsTable">
+    <thead>
+      <tr>
+        <th>Machine Name</th>
+        <th>Ram</th>
+        <th>Disk</th>
+        <th>Cores</th>
+        <th>Threads</th>
+        <th>Cache</th>
+        <th>Graphics</th>
+        <th>OS</th>
+        <th>Form Factor</th>
+        <th>Power Supply</th>
+        <th>Warranty</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="combinationsBody"></tbody>
+  </table>
+
+  <div class="details-container" id="detailsContainer">
+    <h3>Machine Details</h3>
+    <p id="machineDetails"></p>
+    <div class="back-button" onclick="showCombinations()">Back to Combinations</div>
+  </div>
+
+  <div class="download-ui" id="downloadUI">
+    <h3>Download Combinations</h3>
+    <select id="savedLists"></select>
+    <button onclick="downloadSelectedList()">Download</button>
+    <button onclick="hideDownloadUI()">Close</button>
+  </div>
+</div>
+
+<script>
+  function generateMachineName() {
+    const adjectives = ['Innovative', 'Quantum', 'Pioneer', 'Dynamic', 'Epic', 'Futuristic', 'Prime', 'Evolutionary', 'Strategic', 'Ultimate'];
+    const nouns = ['Spectra', 'Cyber', 'Nebula', 'Quantum', 'Orion', 'Genesis', 'Xenon', 'Pulse', 'Horizon', 'Vortex'];
+    return `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${nouns[Math.floor(Math.random() * nouns.length)]}`;
+  }
+
+  function generateCombinations() {
+    const combinationsBody = document.getElementById('combinationsBody');
+    combinationsBody.innerHTML = '';
+
+    for (let i = 1; i <= 10; i++) {
+      const machineName = generateMachineName();
+      const ram = Math.floor(Math.random() * 3) + 8;
+      const disk = Math.floor(Math.random() * 3) + 256;
+      const cores = Math.floor(Math.random() * 4) + 4;
+      const threads = cores * 2;
+      const cache = Math.floor(Math.random() * 6) + 6;
+      const graphics = `Graphics ${Math.floor(Math.random() * 3) + 4}GB`;
+      const os = Math.random() < 0.5 ? 'Windows' : 'Linux';
+      const formFactor = Math.random() < 0.5 ? 'Desktop' : 'Laptop';
+      const powerSupply = `${Math.floor(Math.random() * 300) + 400}W`;
+      const warranty = `${Math.floor(Math.random() * 2) + 1} year(s)`;
+
+      const newRow = `
+        <tr>
+          <td>${machineName}</td>
+          <td>${ram} GB</td>
+          <td>${disk} GB</td>
+          <td>${cores}</td>
+          <td>${threads}</td>
+          <td>${cache} MB</td>
+          <td>${graphics}</td>
+          <td>${os}</td>
+          <td>${formFactor}</td>
+          <td>${powerSupply}</td>
+          <td>${warranty}</td>
+          <td>
+            <button onclick="showDetails('${machineName}', ${ram}, ${disk}, ${cores}, ${threads}, ${cache}, '${graphics}', '${os}', '${formFactor}', '${powerSupply}', '${warranty}')">Details</button>
+          </td>
+        </tr>
+      `;
+
+      combinationsBody.innerHTML += newRow;
+    }
+  }
+
+  function showDetails(machineName, ram, disk, cores, threads, cache, graphics, os, formFactor, powerSupply, warranty) {
+    const detailsContainer = document.getElementById('detailsContainer');
+    const machineDetails = document.getElementById('machineDetails');
+
+    detailsContainer.style.display = 'block';
+    machineDetails.innerHTML = `
+      <strong>Machine Name:</strong> ${machineName}<br>
+      <strong>Ram:</strong> ${ram} GB<br>
+      <strong>Disk:</strong> ${disk} GB<br>
+      <strong>Cores:</strong> ${cores}<br>
+      <strong>Threads:</strong> ${threads}<br>
+      <strong>Cache:</strong> ${cache} MB<br>
+      <strong>Graphics:</strong> ${graphics}<br>
+      <strong>OS:</strong> ${os}<br>
+      <strong>Form Factor:</strong> ${formFactor}<br>
+      <strong>Power Supply:</strong> ${powerSupply}<br>
+      <strong>Warranty:</strong> ${warranty}<br>
+    `;
+
+    const combinationsTable = document.getElementById('combinationsTable');
+    combinationsTable.style.display = 'none';
+
+    saveButton.style.display = 'none';
+    downloadButton.style.display = 'none';
+  }
+
+  function showCombinations() {
+    const detailsContainer = document.getElementById('detailsContainer');
+    const combinationsTable = document.getElementById('combinationsTable');
+
+    detailsContainer.style.display = 'none';
+    combinationsTable.style.display = 'table';
+
+    saveButton.style.display = 'inline-block';
+    downloadButton.style.display = 'inline-block';
+  }
+
+  function saveCombinations() {
+    const combinationsBody = document.getElementById('combinationsBody');
+    const rows = combinationsBody.getElementsByTagName('tr');
+    const savedCombinations = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].getElementsByTagName('td');
+      const combination = {
+        machineName: cells[0].innerText,
+        ram: cells[1].innerText,
+        disk: cells[2].innerText,
+        cores: cells[3].innerText,
+        threads: cells[4].innerText,
+        cache: cells[5].innerText,
+        graphics: cells[6].innerText,
+        os: cells[7].innerText,
+        formFactor: cells[8].innerText,
+        powerSupply: cells[9].innerText,
+        warranty: cells[10].innerText,
+      };
+
+      savedCombinations.push(combination);
+    }
+
+    const currentDate = new Date();
+    const timestamp = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getHours()}-${currentDate.getMinutes()}-${currentDate.getSeconds()}`;
+    localStorage.setItem(`combinations_${timestamp}`, JSON.stringify(savedCombinations));
+    alert('Combinations saved successfully!');
+  }
+
+  function showDownloadUI() {
+    const downloadUI = document.getElementById('downloadUI');
+    const savedListsSelect = document.getElementById('savedLists');
+    savedListsSelect.innerHTML = '';
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('combinations_')) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.innerText = key.replace('combinations_', '');
+        savedListsSelect.appendChild(option);
+      }
+    }
+
+    downloadUI.style.display = 'block';
+  }
+
+  function downloadSelectedList() {
+    const savedListsSelect = document.getElementById('savedLists');
+    const selectedListKey = savedListsSelect.value;
+    const selectedList = localStorage.getItem(selectedListKey);
+    
+    const blob = new Blob([selectedList], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${selectedListKey}.json`;
+    link.click();
+
+    hideDownloadUI();
+  }
+
+  function hideDownloadUI() {
+    const downloadUI = document.getElementById('downloadUI');
+    downloadUI.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
