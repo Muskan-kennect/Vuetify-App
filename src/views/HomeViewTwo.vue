@@ -146,10 +146,17 @@
 </script>
   
   <style scoped>
+
+
+.main{
+  width: 100%;
+  height: 100%;
+}
   .blue-background {
     background-color: rgb(69, 145, 193);
     display: flex;
-    
+    width: 100%;
+    margin-left: -20%;
     flex-direction: column;
   }
 

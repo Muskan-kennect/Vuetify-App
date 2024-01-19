@@ -10,9 +10,12 @@ export const useTaskStore = defineStore('task', {
       const newTask = {
         id: this.tasks.length + 1,
         title,
-        isCompleted: false,
+        isCompleted: 0,
       };
       this.tasks.push(newTask);
+    },
+    updateTasks(state, tasks) {
+      state.tasks = tasks;
     },
     clearCompletedTasks() {
       this.tasks = this.tasks.filter((task) => !task.isCompleted);
